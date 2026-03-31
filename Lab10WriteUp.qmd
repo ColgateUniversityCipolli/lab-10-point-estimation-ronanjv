@@ -138,45 +138,31 @@ Suppose a player has a 50\% chance of winning a specific leg, that is let $p=0.5
 
 **Solution**
 ```{r}
-# altbinom of .5 theta
-prob.5 = daltbinom(6, 11, 0.5, 0.5)
-# altbinom of 1.5 theta
-prob1.5 = daltbinom(6, 11, 0.5, 1.5)
-prob.5
-prob1.5
+#sequence of thetas
+theta_seq <- seq(0.5, 1.5, length.out = 1000)
 
-ggdat = tibble(x = 0:11) |>
-  mutate(theta0.5 = daltbinom(x, 11, 0.5, 0.50),
-         theta1.5 = daltbinom(x, 11, 0.5, 1.50))
+# probability of 6 wins
+prob6 = daltbinom(6, 11, 0.5, theta_seq)
+
+ggdat = tibble(theta = theta_seq, prob = prob6)
 ```
 
 ```{r}
 #| label: theta.5_1.5
-#| fig-cap: "Altham's Binomial PMF for Theta = 0.5 and 1.5"
+#| fig-cap: "Altham's Binomial"
 #| fig-width: 5
 #| fig-height: 3
 #| scale: "80%"
 #| fig-align: "center"
 #| size: scriptsize
 
-# plotting .5 theta PMF
-plot1 = ggplot() +
-geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta0.5)) + geom_hline(yintercept = 0) +
-scale_x_continuous("x", breaks = 0:11) +
-ylab("Probability") +
-ggtitle(" = 0.50") +
-theme_bw()
-
-
-# plotting 1.5 theta PMF
-plot2 = ggplot() +
-geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta1.5)) + geom_hline(yintercept = 0) +
-scale_x_continuous("x", breaks = 0:11) +
-ylab("Probability") +
-ggtitle(" = 1.50") +
-theme_bw()
- 
-plot1 | plot2
+# 
+ggplot(ggdat, aes(x = theta, y = prob)) +
+  geom_line() +
+  xlab(expression(theta)) +
+  ylab("P(X = 6)") +
+  ggtitle("P(X = 6) vs. theta") +
+  theme_bw()
 ```
 
 ## Part b
