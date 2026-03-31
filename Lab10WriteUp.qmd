@@ -156,7 +156,6 @@ ggdat = tibble(theta = theta_seq, prob = prob6)
 #| fig-align: "center"
 #| size: scriptsize
 
-# 
 ggplot(ggdat, aes(x = theta, y = prob)) +
   geom_line() +
   xlab(expression(theta)) +
@@ -167,6 +166,56 @@ ggplot(ggdat, aes(x = theta, y = prob)) +
 
 ## Part b
 Now, plot Altham's Multiplicative Binomial Distribution under the same parameters with $\theta=0.50$, $\theta=1$, and $\theta=1.5$. Use `ncol=1` in `facet_wrap()` to plot the PMFs in a single column for comparing.
+
+**Solution**
+```{r}
+# prob for thetas
+theta0.5 = daltbinom(6, 11, 0.5, 0.5)
+theta1 = daltbinom(6, 11, 0.5, 1)
+theta1.5 = daltbinom(6, 11, 0.5, 1.5)
+
+ggdat = tibble(x = 0:11) |>
+  mutate(theta0.5 = daltbinom(x, 11, 0.5, 0.50),
+         theta1 = daltbinom(x, 11, 0.5, 1.00),
+         theta1.5 = daltbinom(x, 11, 0.5, 1.50))
+```
+
+```{r}
+#| label: PMFs
+#| fig-cap: "Altham's Binomial PMFs"
+#| fig-width: 6.5
+#| fig-height: 3
+#| scale: "80%"
+#| fig-align: "center"
+#| size: scriptsize
+
+
+plot1 = ggplot() +
+  geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta0.5)) +
+  geom_hline(yintercept = 0) +
+  scale_x_continuous("x", breaks = 0:11) +
+  ylab("Probability") +
+  ggtitle("θ = 0.50") +
+  theme_bw()
+
+plot2 = ggplot() +
+  geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta1)) +
+  geom_hline(yintercept = 0) +
+  scale_x_continuous("x", breaks = 0:11) +
+  ylab("Probability") +
+  ggtitle("θ = 1.00") +
+  theme_bw()
+
+plot3 = ggplot() +
+  geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta1.5)) +
+  geom_hline(yintercept = 0) +
+  scale_x_continuous("x", breaks = 0:11) +
+  ylab("Probability") +
+  ggtitle("θ = 1.50") +
+  theme_bw()
+
+plot1 + plot2 + plot3
+```
 
 ## Part c
 What is your best assessment of what $\theta$ is doing in this setting. Consider when a 6-0 blowout is most likely, and when a 5-6 nail-biter is most likely. Note here we should treat the match as a fixed $n=11$ as we did for $n=3$ in Lab 8.\
