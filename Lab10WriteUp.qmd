@@ -136,6 +136,49 @@ To help us think about the interpretation, something that was challenging before
 ## Part a
 Suppose a player has a 50\% chance of winning a specific leg, that is let $p=0.50$. Let's look at the probability they win ($x=6$) legs in the match. Compute this probability over a sequence from $\theta=0.5$ to $\theta=1.5$ and plot it using a line where the $x$-axis is $\theta$ and the $y$-axis is $P(X=6)$.
 
+**Solution**
+```{r}
+# altbinom of .5 theta
+prob.5 = daltbinom(6, 11, 0.5, 0.5)
+# altbinom of 1.5 theta
+prob1.5 = daltbinom(6, 11, 0.5, 1.5)
+prob.5
+prob1.5
+
+ggdat = tibble(x = 0:11) |>
+  mutate(theta0.5 = daltbinom(x, 11, 0.5, 0.50),
+         theta1.5 = daltbinom(x, 11, 0.5, 1.50))
+```
+
+```{r}
+#| label: theta.5_1.5
+#| fig-cap: "Altham's Binomial PMF for Theta = 0.5 and 1.5"
+#| fig-width: 5
+#| fig-height: 3
+#| scale: "80%"
+#| fig-align: "center"
+#| size: scriptsize
+
+# plotting .5 theta PMF
+plot1 = ggplot() +
+geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta0.5)) + geom_hline(yintercept = 0) +
+scale_x_continuous("x", breaks = 0:11) +
+ylab("Probability") +
+ggtitle(" = 0.50") +
+theme_bw()
+
+
+# plotting 1.5 theta PMF
+plot2 = ggplot() +
+geom_linerange(data = ggdat, aes(x = x, ymin = 0, ymax = theta1.5)) + geom_hline(yintercept = 0) +
+scale_x_continuous("x", breaks = 0:11) +
+ylab("Probability") +
+ggtitle(" = 1.50") +
+theme_bw()
+ 
+plot1 | plot2
+```
+
 ## Part b
 Now, plot Altham's Multiplicative Binomial Distribution under the same parameters with $\theta=0.50$, $\theta=1$, and $\theta=1.5$. Use `ncol=1` in `facet_wrap()` to plot the PMFs in a single column for comparing.
 
