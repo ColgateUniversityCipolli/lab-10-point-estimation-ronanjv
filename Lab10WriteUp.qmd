@@ -229,6 +229,21 @@ A 6-0 blowout is most likely with a small theta, when wins come in clusters(hot 
 ## Part a
 Altham's Multiplicative Binomial Distribution does not typically simplify to the clean $E(X)=np$ seen in the Binomial distribution, unless $\theta = 1$. Write out the expression that would need to be solved to find $E(X^k)$, and then write a function that computes it given the proposed parameter values $p$ (`prob`) and $\theta$ (`theta`).
 
+**Solution**
+
+$E(X^k) = \sum_{i=-\infty}^\infty {x^k*f_X(x)}$
+```{r}
+ealtbinom = function(k, size, prob,theta){
+  x = 0:size
+  sum(x^k * daltbinom(x, size, prob, theta))
+}
+# check to see if it equals mean of theta .5
+ealtbinom(1,11,.5,.5)
+```
+
+
+
+
 ## Part b
 Describe how you can use your answer to part a to find Method of Moments estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
 
