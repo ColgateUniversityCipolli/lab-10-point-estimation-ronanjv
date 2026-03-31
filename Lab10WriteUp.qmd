@@ -243,15 +243,34 @@ ealtbinom(1,11,.5,.5)
 
 
 
-
 ## Part b
 Describe how you can use your answer to part a to find Method of Moments estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
+
+**Solution**
+Because we have two unknown parameters, we would need two equations in order to use a system of equations to find their values. We can use the expected value function from part a using k=1 and k=2 to get two equations using two estimators and solve for the values of p and theta that satisfy it.
 
 ## Part c
 Write a function that computes the log-likelihood for Altham's Multiplicative Binomial Distribution, given data (`x`) and proposed parameter values $p$ (`prob`) and $\theta$ (`theta`).
 
+**Solution**
+```{r}
+llaltbinom = function(data = x, par, size, mle = F){
+  prob = ifelse(mle, 1 / (1 + exp(-par[1])), par[1])
+  theta = ifelse(mle, exp(par[2]), par[2])
+  
+  ll = sum(log(daltbinom(x,size,prob,theta)))
+
+  ifelse(mle, -ll, ll)
+}
+```
+
+
 ## Part d
 Describe how you can use your answer to part c to find Maximum Likelihood estimates for the parameters $p$ and $\theta$ for Altham's Multiplicative Binomial Distribution based on data.
+
+**Solution**
+To find the mle I would use the optim function setting mle to true. This would contrain the search to 0-1 because of my if else statement and returns the negative log likelihood because optim minimizing by default but the min of the negative function would be the max.
+
 
 # Lab 10
 Peter "Snakebite" Wright is a two-time Professional Darts Corporation World Champion (2020, 2022) and a former World No. 1. He is one of the sport's most decorated players, winning nearly 50 PDC titles including the World Matchplay, UK Open, and multiple European Championships. 
